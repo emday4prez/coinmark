@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Hot Springs",
+    "series": "National Park",
+    "year": 2010,
+    "mintMark": null // Use null for optional properties that are nil
+  },
+  {
+    "name": "Yellowstone",
+    "series": "National Park",
+    "year": 2010,
+    "mintMark": null
+  },
+  {
+    "name": "Yosemite",
+    "series": "National Park",
+    "year": 2010,
+    "mintMark": null
+  },
+  {
+    "name": "Grand Canyon",
+    "series": "National Park",
+    "year": 2010,
+    "mintMark": null
+  },
+  {
+    "name": "Mount Hood",
+    "series": "National Park",
+    "year": 2010,
+    "mintMark": null
+  },
+  {
+    "name": "Gettysburg",
+    "series": "National Park",
+    "year": 2011,
+    "mintMark": null
+  }
+  // ... add more National Park quarters
+]

@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Maya Angelou",
+    "series": "American Women",
+    "year": 2022,
+    "mintMark": null
+  },
+  {
+    "name": "Dr. Sally Ride",
+    "series": "American Women",
+    "year": 2022,
+    "mintMark": null
+  },
+  {
+    "name": "Wilma Mankiller",
+    "series": "American Women",
+    "year": 2022,
+    "mintMark": null
+  },
+  {
+    "name": "Nina Otero-Warren",
+    "series": "American Women",
+    "year": 2022,
+    "mintMark": null
+  },
+  {
+    "name": "Anna May Wong",
+    "series": "American Women",
+    "year": 2022,
+    "mintMark": null
+  },
+  {
+    "name": "Bessie Coleman",
+    "series": "American Women",
+    "year": 2023,
+    "mintMark": null
+  }
+  // ... add more American Women quarters
+]
