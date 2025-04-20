@@ -2,14 +2,24 @@
 //  Coin.swift
 //  CoinMark
 
-
 import Foundation
+import SwiftData
 
-protocol Coin : Identifiable, Codable, Hashable {
-    var id: UUID {get}
-    var name: String {get}
-    var series: String {get}
-    var year: Int {get}
-    var mintMark: String? {get}
-    var isCollected: Bool {get set}
+@Model
+final class Coin {
+    var name: String
+    var series: String
+    var year: Int
+    var mintMark: String?
+    var isCollected: Bool
+    
+    init(name: String, series: String, year: Int, mintMark: String? = nil, isCollected: Bool = false){
+        
+        self.name = name
+        self.series = series
+        self.year = year
+        self.mintMark = mintMark
+        self.isCollected = isCollected
+    }
+    
 }

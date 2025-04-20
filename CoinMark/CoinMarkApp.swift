@@ -13,5 +13,6 @@ struct CoinMarkApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Coin.self)
     }
 }
