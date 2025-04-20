@@ -11,7 +11,7 @@ final class Coin {
     var series: String
     var year: Int
     var mintMark: String?
-    var isCollected: Bool
+    var isCollected: Bool = false
     
     init(name: String, series: String, year: Int, mintMark: String? = nil, isCollected: Bool = false){
         

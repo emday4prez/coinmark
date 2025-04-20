@@ -3,7 +3,7 @@
     "name": "Hot Springs",
     "series": "National Park",
     "year": 2010,
-    "mintMark": null // Use null for optional properties that are nil
+    "mintMark": null 
   },
   {
     "name": "Yellowstone",
@@ -35,5 +35,4 @@
     "year": 2011,
     "mintMark": null
   }
-  // ... add more National Park quarters
 ]

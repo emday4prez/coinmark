@@ -4,65 +4,20 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    // Removed the problematic @Query for existingCoins
+   
 
     @State private var didAttemptPreload = false // Keep state to prevent multiple attempts per session
 
-    // Main query for displaying coins (remains the same)
-    @Query(sort: [
-        SortDescriptor(\Coin.series),
-        SortDescriptor(\Coin.year),
-        SortDescriptor(\Coin.name)
-    ]) private var allCoins: [Coin]
 
-    @State private var showMissingOnly = false // Filter state
 
-    // Computed property for filtering (remains the same)
-    private var filteredCoins: [Coin] {
-        if showMissingOnly {
-            return allCoins.filter { !$0.isCollected }
-        } else {
-            return allCoins
-        }
-    }
-
-    var body: some View {
+   var body: some View {
+    
         NavigationStack {
-            Toggle("Show Missing Only", isOn: $showMissingOnly)
-                .padding(.horizontal)
-
-            List {
-                ForEach(filteredCoins) { coin in
-      
-                    HStack {
-                       VStack(alignment: .leading) {
-                            Text(coin.name).font(.headline)
-                            Text("\(coin.series) - \(coin.year)")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                            if let mintMark = coin.mintMark, !mintMark.isEmpty {
-                                Text("Mint: \(mintMark)")
-                                    .font(.caption)
-                                    .foregroundColor(.orange)
-                            }
-                        }
-                        Spacer()
-                        Image(systemName: coin.isCollected ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(coin.isCollected ? .green : .gray)
-                            .font(.title2)
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                         coin.isCollected.toggle()
-                        // Optional: try? modelContext.save()
-                    }
+            Text("Loading Coin Data...")
+                .onAppear {
+                
+                    checkAndPreloadData()
                 }
-            }
-            .navigationTitle("Quarter Collection")
-            .onAppear {
-                // Perform the existence check *manually* here
-                checkAndPreloadData()
-            }
         }
     }
 
@@ -102,7 +57,7 @@ struct ContentView: View {
     }
 
 
-    // --- Data Preloading Functions (Keep from Phase 2) ---
+
     private func preloadData() {
         print("Executing preloadData...")
         loadJSON(filename: "national_parks", modelContext: modelContext)
@@ -115,32 +70,60 @@ struct ContentView: View {
         }
     }
 
+
     private func loadJSON(filename: String, modelContext: ModelContext) {
+        print("Attempting to load JSON file: \(filename).json")
+
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
-            print("Failed to find \(filename).json in bundle.")
+            print("ERROR: Failed to find \(filename).json in app bundle.")
             return
         }
+        print("Found file URL: \(url.path)")
+
         guard let data = try? Data(contentsOf: url) else {
-            print("Failed to load \(filename).json from bundle.")
+            print("ERROR: Failed to load data from \(filename).json.")
             return
         }
+        print("Successfully loaded data from file.")
+
         let decoder = JSONDecoder()
-        guard let decodedData = try? decoder.decode([DecodableCoin].self, from: data) else {
-            print("Failed to decode \(filename).json.")
-            return
+        print("Attempting to decode \(filename).json using DecodableCoin...")
+
+        // --- MODIFICATION START: Use do-catch for detailed decoding errors ---
+        do {
+            // Try to decode into an array of [DecodableCoin] structs
+            let decodedData = try decoder.decode([DecodableCoin].self, from: data)
+            print("Successfully decoded \(decodedData.count) items from \(filename).json.")
+
+            // Convert DecodableCoin structs into Coin @Model objects and insert them
+            print("Inserting decoded data into ModelContext...")
+            for decodableCoin in decodedData {
+                let newCoin = Coin( // Use Coin or Quarter consistently
+                    name: decodableCoin.name,
+                    series: decodableCoin.series,
+                    year: decodableCoin.year,
+                    mintMark: decodableCoin.mintMark,
+                    isCollected: false
+                )
+                modelContext.insert(newCoin)
+            }
+            print("Finished inserting \(decodedData.count) items from \(filename).json into context.")
+
+        } catch {
+            // If decoder.decode fails, the catch block executes
+            // Print the DETAILED decoding error
+            print("<<<<< DETAILED DECODING ERROR (\(filename).json) >>>>>")
+            // The 'error' variable contains rich information
+            if let decodingError = error as? DecodingError {
+                 print("Decoding Error: \(decodingError)") // Provides specific context
+            } else {
+                // Print the general error if it's not a DecodingError
+                 print("Non-Decoding Error: \(error)")
+                 print("Localized Description: \(error.localizedDescription)")
+            }
+            print("<<<<< END DETAILED DECODING ERROR >>>>>")
         }
-        print("Successfully decoded \(decodedData.count) items from \(filename).json")
-        for decodableCoin in decodedData {
-            let newCoin = Coin(
-                name: decodableCoin.name,
-                series: decodableCoin.series,
-                year: decodableCoin.year,
-                mintMark: decodableCoin.mintMark,
-                isCollected: false
-            )
-            modelContext.insert(newCoin)
-        }
-         print("Finished inserting items from \(filename).json into context.")
+        // --- MODIFICATION END ---
     }
 }
 
