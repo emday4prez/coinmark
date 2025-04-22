@@ -8,7 +8,11 @@ struct ContentView: View {
 
     @State private var didAttemptPreload = false // Keep state to prevent multiple attempts per session
 
-
+    @Query(sort: [ 
+        SortDescriptor(\Coin.series), // Primary sort: National Park, then American Women
+        SortDescriptor(\Coin.year),   // Secondary sort: within series, sort by year
+        SortDescriptor(\Coin.name)    // Tertiary sort: if same series/year, sort by name
+    ]) private var coins: [Coin]
 
    var body: some View {
     
@@ -29,7 +33,6 @@ struct ContentView: View {
             return
         }
 
-        // Mark that we are attempting the check now for this session
         didAttemptPreload = true
 
         // --- Efficiently check if ANY Coin object exists ---
