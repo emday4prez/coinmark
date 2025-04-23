@@ -17,7 +17,27 @@ struct ContentView: View {
    var body: some View {
     
         NavigationStack {
-            Text("Loading Coin Data...")
+            List(alignment: .leading){
+                ForEach(coins){coin in
+                    HStack{
+                        VStack(alignment: .leading){
+                            Text(coin.name).font(.headline)
+                            Text("\(coin.series) - \(coin.year)")
+                                .font(.subheadline)
+                                .forgroundColor(.gray)
+                            
+                            if let mintMark = coin.mintMark, !mintMark.isEmpty {
+                                                           Text("Mint: \(mintMark)")
+                                                               .font(.caption)
+                                                               .foregroundColor(.orange)
+                        }
+                    }
+                        Spacer()
+                        Image(systemName: "circle")
+                            .forgroundColor(.gray)
+                }
+               
+            }
                 .onAppear {
                 
                     checkAndPreloadData()
@@ -25,7 +45,7 @@ struct ContentView: View {
         }
     }
 
-    // --- Encapsulated Check and Preload Logic ---
+ 
     private func checkAndPreloadData() {
         // Prevent multiple checks/loads within the same app session
         guard !didAttemptPreload else {
