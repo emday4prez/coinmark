@@ -14,36 +14,38 @@ struct ContentView: View {
         SortDescriptor(\Coin.name)    // Tertiary sort: if same series/year, sort by name
     ]) private var coins: [Coin]
 
-   var body: some View {
-    
-        NavigationStack {
-            List(alignment: .leading){
-                ForEach(coins){coin in
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text(coin.name).font(.headline)
-                            Text("\(coin.series) - \(coin.year)")
-                                .font(.subheadline)
-                                .forgroundColor(.gray)
-                            
-                            if let mintMark = coin.mintMark, !mintMark.isEmpty {
-                                                           Text("Mint: \(mintMark)")
-                                                               .font(.caption)
-                                                               .foregroundColor(.orange)
-                        }
-                    }
-                        Spacer()
-                        Image(systemName: "circle")
-                            .forgroundColor(.gray)
-                }
-               
-            }
+    var body: some View {
+            NavigationStack {
+                List {
+                    ForEach(coins) { coin in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(coin.name).font(.headline)
+                                Text("\(coin.series) - \(coin.year)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+
+                                if let mintMark = coin.mintMark, !mintMark.isEmpty {
+                                    Text("Mint: \(mintMark)")
+                                        .font(.caption)
+                                        .foregroundColor(.orange)
+                                }
+                            }
+                            Spacer()
+                            Image(systemName: "circle")
+                                .foregroundColor(.gray)
+                        } // End HStack
+                    } // End ForEach
+                } // <<< List ends here
+                // --- ListModifiers ---
+                .navigationTitle("Quarter Collection")
                 .onAppear {
-                
+                    print("List appeared, checking/preloading data...")
                     checkAndPreloadData()
                 }
-        }
-    }
+         
+            } // End NavigationStack
+        } // End body
 
  
     private func checkAndPreloadData() {
@@ -112,7 +114,7 @@ struct ContentView: View {
         let decoder = JSONDecoder()
         print("Attempting to decode \(filename).json using DecodableCoin...")
 
-        // --- MODIFICATION START: Use do-catch for detailed decoding errors ---
+      
         do {
             // Try to decode into an array of [DecodableCoin] structs
             let decodedData = try decoder.decode([DecodableCoin].self, from: data)
@@ -121,7 +123,7 @@ struct ContentView: View {
             // Convert DecodableCoin structs into Coin @Model objects and insert them
             print("Inserting decoded data into ModelContext...")
             for decodableCoin in decodedData {
-                let newCoin = Coin( // Use Coin or Quarter consistently
+                let newCoin = Coin(
                     name: decodableCoin.name,
                     series: decodableCoin.series,
                     year: decodableCoin.year,
@@ -146,7 +148,7 @@ struct ContentView: View {
             }
             print("<<<<< END DETAILED DECODING ERROR >>>>>")
         }
-        // --- MODIFICATION END ---
+  
     }
 }
 
