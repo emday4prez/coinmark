@@ -32,8 +32,9 @@ struct ContentView: View {
                                 }
                             }
                             Spacer()
-                            Image(systemName: "circle")
-                                .foregroundColor(.gray)
+                            Image(systemName: coin.isCollected ? "checkmark.circle.fill" : "circle")
+                                .font(.title2)
+                                .foregroundColor(coin.isCollected ? .green : .gray)
                         } // End HStack
                     } // End ForEach
                 } // <<< List ends here
