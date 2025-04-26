@@ -36,6 +36,11 @@ struct ContentView: View {
                                 .font(.title2)
                                 .foregroundColor(coin.isCollected ? .green : .gray)
                         } // End HStack
+                        .contentShape(Rectangle())
+                        .onTapGesture{
+                            print("tapped \(coin.name)")
+                            coin.isCollected.toggle()
+                        }
                     } // End ForEach
                 } // <<< List ends here
                 // --- ListModifiers ---
