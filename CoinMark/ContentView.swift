@@ -6,13 +6,24 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
    
 
-    @State private var didAttemptPreload = false // Keep state to prevent multiple attempts per session
-
-    @Query(sort: [ 
-        SortDescriptor(\Coin.series), // Primary sort: National Park, then American Women
-        SortDescriptor(\Coin.year),   // Secondary sort: within series, sort by year
-        SortDescriptor(\Coin.name)    // Tertiary sort: if same series/year, sort by name
-    ]) private var coins: [Coin]
+    @State private var didAttemptPreload = false
+    @State private var showMissingOnly = false
+    
+    private var filteredCoins: [Coin]{
+        if showMissingOnly{
+            return allCoins.filter{ coin in
+                !coin.isCollected
+            }
+        }else{
+                return allCoins
+            }
+        }
+    }
+    @Query(sort: [
+        SortDescriptor(\Coin.series),
+        SortDescriptor(\Coin.year),
+        SortDescriptor(\Coin.name)
+    ]) private var allCoins: [Coin]
 
     var body: some View {
             NavigationStack {
