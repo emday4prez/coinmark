@@ -4,31 +4,34 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-   
-
     @State private var didAttemptPreload = false
-    @State private var showMissingOnly = false
-    
-    private var filteredCoins: [Coin]{
-        if showMissingOnly{
-            return allCoins.filter{ coin in
-                !coin.isCollected
-            }
-        }else{
-                return allCoins
-            }
-        }
-    }
+
     @Query(sort: [
         SortDescriptor(\Coin.series),
         SortDescriptor(\Coin.year),
         SortDescriptor(\Coin.name)
     ]) private var allCoins: [Coin]
 
+    @State private var showMissingOnly = false
+
+    private var filteredCoins: [Coin] {
+        if showMissingOnly {
+            // If filter is on, return only coins where isCollected is false
+            return allCoins.filter { coin in
+                !coin.isCollected
+            }
+        } else {
+            // If filter is off, return all coins
+            return allCoins
+        }
+    }
+
     var body: some View {
             NavigationStack {
+                Toggle("Show Missing Only", isOn: $showMissingOnly)
+                    .padding(.horizontal)
                 List {
-                    ForEach(coins) { coin in
+                    ForEach(filteredCoins) { coin in
                         HStack {
                             VStack(alignment: .leading) {
                                 Text(coin.name).font(.headline)
