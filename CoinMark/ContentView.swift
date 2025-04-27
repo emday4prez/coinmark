@@ -55,8 +55,8 @@ struct ContentView: View {
                             print("tapped \(coin.name)")
                             coin.isCollected.toggle()
                         }
-                    } // End ForEach
-                } // <<< List ends here
+                    }
+                }
                 // --- ListModifiers ---
                 .navigationTitle("Quarter Collection")
                 .onAppear {
@@ -97,7 +97,7 @@ struct ContentView: View {
         } catch {
             // Handle potential errors during the fetchCount operation
             print("Failed to fetch coin count for preload check: \(error.localizedDescription)")
-            // Decide how to proceed if the check fails (e.g., maybe don't preload)
+            // Decide how to proceed if the check fails (maybe don't preload)
         }
     }
 
@@ -155,18 +155,13 @@ struct ContentView: View {
             print("Finished inserting \(decodedData.count) items from \(filename).json into context.")
 
         } catch {
-            // If decoder.decode fails, the catch block executes
-            // Print the DETAILED decoding error
-            print("<<<<< DETAILED DECODING ERROR (\(filename).json) >>>>>")
-            // The 'error' variable contains rich information
             if let decodingError = error as? DecodingError {
-                 print("Decoding Error: \(decodingError)") // Provides specific context
+                 print("Decoding Error: \(decodingError)")
             } else {
-                // Print the general error if it's not a DecodingError
                  print("Non-Decoding Error: \(error)")
                  print("Localized Description: \(error.localizedDescription)")
             }
-            print("<<<<< END DETAILED DECODING ERROR >>>>>")
+           
         }
   
     }
