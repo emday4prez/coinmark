@@ -90,7 +90,7 @@ struct ContentView: View {
 
             if count == 0 {
                 print("Database appears empty. Attempting to preload JSON data...")
-                preloadData() // Call your existing preload function
+                preloadData() 
             } else {
                 print("Database already contains data. Skipping preload.")
             }
