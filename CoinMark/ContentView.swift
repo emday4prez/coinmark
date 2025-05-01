@@ -77,7 +77,7 @@ struct ContentView: View {
 
         didAttemptPreload = true
 
-        // --- Efficiently check if ANY Coin object exists ---
+        // --- check if ANY Coin object exists ---
         // 1. Create a FetchDescriptor for Coin.
         var fetchDescriptor = FetchDescriptor<Coin>()
         // 2. Set fetchLimit to 1 (we only need to know if at least one exists).
